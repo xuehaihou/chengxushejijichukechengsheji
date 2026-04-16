@@ -53,7 +53,7 @@ function Sync-ToGitHub {
     
     if ($LASTEXITCODE -eq 0) {
         # 推送到 GitHub
-        & $git push origin main --quiet
+        & $git push origin main --force --quiet
         if ($LASTEXITCODE -eq 0) {
             Write-Host "[$(Get-Date -Format 'HH:mm:ss')] ✅ 同步成功！" -ForegroundColor Green
         } else {

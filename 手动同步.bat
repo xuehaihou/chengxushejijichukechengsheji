@@ -27,7 +27,7 @@ set TIMESTAMP=%date:~0,4%-%date:~5,2%-%date:~8,2% %time:~0,2%:%time:~3,2%:%time:
 
 echo.
 echo [4/4] 推送到 GitHub...
-%GIT% push origin main
+%GIT% push origin main --force
 
 if %ERRORLEVEL% == 0 (
     echo.
