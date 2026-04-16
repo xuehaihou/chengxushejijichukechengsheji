@@ -1,10 +1,94 @@
-﻿#ifndef STAT_H
+/**
+ * @file stat.h
+ * @brief 医疗统计查询模块头文件 - 定义统计功能的接口声明
+ *
+ * 本模块提供医院运营数据的综合统计分析功能。
+ * 作为数据汇总和报表生成的核心模块，
+ * 整合门诊、住院、急诊、药品等多维度数据进行统计分析。
+ *
+ * 模块功能:
+ *   - 患者数量统计（按类型分类）
+ *   - 费用收支统计（门诊/住院）
+ *   - 药品库存统计（种类/数量/预警）
+ *   - 科室业务量分析（分组统计）
+ *
+ * 设计特点:
+ *   - 使用void*指针实现通用接口
+ *   - 依赖其他模块的数据结构定义
+ *   - 只读操作，不修改原始数据
+ *   - 提供多维度交叉分析能力
+ *
+ * 使用方式:
+ *   在main.c或其他调用处包含此头文件，
+ *   并确保已包含相关模块的头文件以获得完整的类型定义。
+ *
+ * 依赖关系:
+ *   - 依赖 utils.h (基础工具函数)
+ *   - 依赖 outpatient.h (门诊数据结构)
+ *   - 依赖 inpatient.h (住院数据结构)
+ *   - 依赖 emergency.h (急诊数据结构)
+ *   - 依赖 medicine.h (药品数据结构)
+ *
+ * 注意事项:
+ *   由于使用void*作为参数类型，调用时需要确保传入正确的指针类型。
+ *   建议在包含此头文件前先包含各业务模块的头文件。
+ */
+
+#ifndef STAT_H
 #define STAT_H
 
 #include "utils.h"
 
-// Statistics menu - declare prototype. The actual type definitions are provided by
-// the modules that include their respective headers before including this file.
-void statMenu(/* OutpatientList* */ void* opList, /* InpatientList* */ void* ipList, /* EmergencyList* */ void* emList, /* MedicineList* */ void* medList);
+/**
+ * @brief 医疗统计查询主菜单函数
+ *
+ * @param opList 门诊患者链表指针(OutpatientList*)
+ *        用于获取门诊统计数据，包括：
+ *        - 门诊总人次 (opList->count)
+ *        - 各患者的费用信息 (op->cost)
+ *        - 各患者的科室分布 (op->department)
+ *
+ * @param ipList 住院患者链表指针(InpatientList*)
+ *        用于获取住院统计数据，包括：
+ *        - 住院总人数 (ipList->count)
+ *        - 各患者的总费用 (ip->totalCost)
+ *        - 各患者的科室分布 (ip->department)
+ *        - 各患者的住院状态 (ip->status)
+ *
+ * @param emList 急诊患者链表指针(EmergencyList*)
+ *        用于获取急诊统计数据，包括：
+ *        - 急诊总人次 (emList->count)
+ *
+ * @param medList 药品库存链表指针(MedicineList*)
+ *       用于获取药品统计数，包括：
+ *        - 药品种类数量
+ *        - 各药品的库存量 (m->quantity)
+ *        - 库存预警信息
+ *
+ * 功能说明:
+ *   提供交互式统计查询界面，用户可选择不同的统计维度查看数据分析结果。
+ *
+ * 统计功能列表:
+ *   1. 患者综合统计    - 三类患者总数及住院状态分布
+ *   2. 费用收支统计    - 门诊和住院费用汇总
+ *   3. 药品库存统计    - 种类、总量及预警
+ *   4. 科室业务量统计  - 按科室分组的就诊量
+ *
+ * 实现原理:
+ *   通过遍历各链表提取数据，进行累加、分类等计算，
+ *   最后格式化输出统计报表。
+ *
+ * 数据安全:
+ *   本函数只读取数据，不会修改任何链表内容。
+ *   所有统计都是基于内存中的当前数据快照。
+ *
+ * 性能说明:
+ *   采用线性遍历算法，时间复杂度为O(n)，
+ *   n为所有相关链表的节点总数。
+ */
+void statMenu(/* OutpatientList* */ void* opList,
+              /* InpatientList* */ void* ipList,
+              /* EmergencyList* */ void* emList,
+              /* MedicineList* */ void* medList);
 
 #endif
